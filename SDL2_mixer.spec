@@ -1,7 +1,15 @@
 #
 # Conditional build:
-%bcond_with	modplug	# use modplug for MOD support (mikmod is used by default)
+%bcond_with	mikmod	# mikmod use for MOD support (modplug is used by default)
+%bcond_without	modplug	# modplug use for MOD support
 #
+# NOTE: sonames detected at build time for:
+# libflac
+# libfluidsynth
+# libmikmod
+# libmodplug
+# libsmpeg2
+# libvorbisfile
 Summary:	Simple DirectMedia Layer - Sample Mixer Library
 Summary(pl.UTF-8):	Simple DirectMedia Layer - biblioteka miksująca próbki dźwiękowe
 Summary(pt_BR.UTF-8):	SDL2 - Biblioteca para mixagem
@@ -12,17 +20,23 @@ License:	Zlib-like
 Group:		Libraries
 Source0:	http://www.libsdl.org/projects/SDL_mixer/release/%{name}-%{version}.tar.gz
 # Source0-md5:	65f6d80df073a1fb3bb537fbda031b50
+Patch0:		%{name}-modplug.patch
 URL:		http://www.libsdl.org/projects/SDL_mixer/
 BuildRequires:	SDL2-devel >= 2.0.0
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flac-devel >= 1.3.0
+BuildRequires:	fluidsynth-devel
 BuildRequires:	libtool >= 2:2.0
-BuildRequires:	libmikmod-devel >= 3.1.10
-%{?with_modplug:BuildRequires:	libmodplug-devel >= 0.8.7}
+%{?with_mikmod:BuildRequires:	libmikmod-devel >= 3.1.10}
+%{?with_modplug:BuildRequires:	libmodplug-devel >= 0.8.8}
+BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel >= 1:1.0
-BuildRequires:	smpeg-devel >= 0.4.4-11
+BuildRequires:	pkgconfig >= 1:0.9.0
+BuildRequires:	smpeg2-devel >= 2.0.0
 Requires:	SDL2 >= 2.0.0
+%{?with_mikmod:Suggests:	libmikmod >= 3.1.10}
+%{?with_modplug:Suggests:	libmodplug >= 0.8.8}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -77,14 +91,17 @@ Bibliotecas estáticas para desenvolvimento com SDL2_mixer.
 
 %prep
 %setup -q
+%patch0 -p1
+
+%{__rm} acinclude/{libtool,lt*}.m4
 
 %build
-#%{__libtoolize}
+%{__libtoolize}
 %{__aclocal} -I acinclude
 %{__autoconf}
 %configure \
-	--enable-music-midi-fluidsynth \
-	%{?with_modplug:--enable-music-mod-modplug}
+	%{?with_mikmod:--enable-music-mod-mikmod} \
+	%{!?with_modplug:--disable-music-mod-modplug}
 %{__make}
 
 %install
