@@ -3,13 +3,14 @@
 %bcond_with	mikmod	# mikmod use for MOD support (modplug is used by default)
 %bcond_without	modplug	# modplug use for MOD support
 #
-# NOTE: sonames detected at build time for:
-# libflac
-# libfluidsynth
-# libmikmod
-# libmodplug
-# libsmpeg2
-# libvorbisfile
+# NOTE: libraries dlopened by sonames detected at build time:
+# libFLAC.so.8
+# libfluidsynth.so.1
+# libmikmod.so.2
+# libmodplug.so.1
+# libsmpeg-2.0.so.0
+# libvorbisfile.so.3
+#
 Summary:	Simple DirectMedia Layer - Sample Mixer Library
 Summary(pl.UTF-8):	Simple DirectMedia Layer - biblioteka miksująca próbki dźwiękowe
 Summary(pt_BR.UTF-8):	SDL2 - Biblioteca para mixagem
@@ -57,7 +58,7 @@ e SMPEG MP3.
 
 %package devel
 Summary:	Header files and more to develop SDL_mixer applications
-Summary(pl.UTF-8):	Pliki nagłówkowe do rozwoju aplikacji używających SDL_mixer
+Summary(pl.UTF-8):	Pliki nagłówkowe do rozwoju aplikacji używających biblioteki SDL_mixer
 Summary(pt_BR.UTF-8):	Bibliotecas e arquivos de inclusão para desenvolvimento de aplicações SDL
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
@@ -67,7 +68,8 @@ Requires:	SDL2-devel >= 2.0.0
 Header files and more to develop SDL2_mixer applications.
 
 %description devel -l pl.UTF-8
-Pliki nagłówkowe do rozwoju aplikacji używających SDL2_mixer
+Pliki nagłówkowe do rozwoju aplikacji używających biblioteki
+SDL2_mixer.
 
 %description devel -l pt_BR.UTF-8
 Bibliotecas e arquivos de inclusão para desenvolvimento de aplicações
