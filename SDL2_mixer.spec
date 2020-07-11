@@ -2,12 +2,16 @@
 # Conditional build:
 %bcond_with	mikmod	# mikmod use for MOD support (modplug is used by default)
 %bcond_without	modplug	# modplug use for MOD support
+%bcond_with	libmad	# libmad use for MP3 support (libmpg123 is used by default)
+%bcond_without	mpg123	# libmpg123 use for MP3 support
 #
 # NOTE: libraries dlopened by sonames detected at build time:
 # libFLAC.so.8
 # libfluidsynth.so.1
 # libmikmod.so.2
 # libmodplug.so.1
+# libmpg123.so.0
+# libopusfile.so.0
 # libsmpeg-2.0.so.0
 # libvorbisfile.so.3
 #
@@ -16,27 +20,31 @@ Summary(pl.UTF-8):	Simple DirectMedia Layer - biblioteka miksująca próbki dźw
 Summary(pt_BR.UTF-8):	SDL2 - Biblioteca para mixagem
 Name:		SDL2_mixer
 Version:	2.0.4
-Release:	1
+Release:	2
 License:	Zlib-like
 Group:		Libraries
 Source0:	http://www.libsdl.org/projects/SDL_mixer/release/%{name}-%{version}.tar.gz
 # Source0-md5:	a36e8410cac46b00a4d01752b32c3eb1
 URL:		http://www.libsdl.org/projects/SDL_mixer/
-BuildRequires:	SDL2-devel >= 2.0.0
+BuildRequires:	SDL2-devel >= 2.0.7
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flac-devel >= 1.3.0
 BuildRequires:	fluidsynth-devel
+%{?with_libmad:BuildRequires:	libmad-devel}
 BuildRequires:	libtool >= 2:2.0
 %{?with_mikmod:BuildRequires:	libmikmod-devel >= 3.1.10}
 %{?with_modplug:BuildRequires:	libmodplug-devel >= 0.8.8}
+%{?with_mpg123:BuildRequires:	libmpg123-devel}
 BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel >= 1:1.0
+BuildRequires:	opusfile-devel >= 0.2
 BuildRequires:	pkgconfig >= 1:0.9.0
 BuildRequires:	smpeg2-devel >= 2.0.0
-Requires:	SDL2 >= 2.0.0
+Requires:	SDL2 >= 2.0.7
 %{?with_mikmod:Suggests:	libmikmod >= 3.1.10}
 %{?with_modplug:Suggests:	libmodplug >= 0.8.8}
+Suggests:	opusfile >= 0.2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -61,7 +69,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe do rozwoju aplikacji używających bibliot
 Summary(pt_BR.UTF-8):	Bibliotecas e arquivos de inclusão para desenvolvimento de aplicações SDL
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	SDL2-devel >= 2.0.0
+Requires:	SDL2-devel >= 2.0.7
 
 %description devel
 Header files and more to develop SDL2_mixer applications.
@@ -101,7 +109,9 @@ Bibliotecas estáticas para desenvolvimento com SDL2_mixer.
 %{__autoconf}
 %configure \
 	%{?with_mikmod:--enable-music-mod-mikmod} \
-	%{!?with_modplug:--disable-music-mod-modplug}
+	%{!?with_modplug:--disable-music-mod-modplug} \
+	%{?with_libmad:--enable-music-mp3-mad-gpl} \
+	%{!?with_mpg123:--disable-music-mp3-mpg123}
 %{__make}
 
 %install
@@ -110,8 +120,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install install-bin \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv $RPM_BUILD_ROOT/%{_bindir}/playmus $RPM_BUILD_ROOT/%{_bindir}/playmus2
-mv $RPM_BUILD_ROOT/%{_bindir}/playwave $RPM_BUILD_ROOT/%{_bindir}/playwave2
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/playmus $RPM_BUILD_ROOT%{_bindir}/playmus2
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/playwave $RPM_BUILD_ROOT%{_bindir}/playwave2
 
 %clean
 rm -rf $RPM_BUILD_ROOT
