@@ -12,7 +12,6 @@
 # libmodplug.so.1
 # libmpg123.so.0
 # libopusfile.so.0
-# libsmpeg-2.0.so.0
 # libvorbisfile.so.3
 #
 Summary:	Simple DirectMedia Layer - Sample Mixer Library
@@ -40,7 +39,6 @@ BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel >= 1:1.0
 BuildRequires:	opusfile-devel >= 0.2
 BuildRequires:	pkgconfig >= 1:0.9.0
-BuildRequires:	smpeg2-devel >= 2.0.0
 Requires:	SDL2 >= 2.0.7
 %{?with_mikmod:Suggests:	libmikmod >= 3.1.10}
 %{?with_modplug:Suggests:	libmodplug >= 0.8.8}
@@ -50,18 +48,18 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Due to popular demand, here is a simple multi-channel audio mixer. It
 supports 4 channels of 16 bit stereo audio, plus a single channel of
-music, mixed by the popular MikMod MOD, Timidity MIDI and SMPEG MP3
+music, mixed by the popular MikMod MOD, Timidity MIDI and MPG123 MP3
 libraries.
 
 %description -l pl.UTF-8
 SDL2_mixer to prosty wielokanałowy mikser audio. Obsługuje 4 kanały
 16-bitowego dźwięku stereo plus jeden kanał dla muzyki miksowanej
-przez popularne biblioteki MikMod MOD, Timitity MIDI i SMPEG MP3.
+przez popularne biblioteki MikMod MOD, Timitity MIDI i MPG123 MP3.
 
 %description -l pt_BR.UTF-8
 Biblioteca que suporta 4 canais de áudio estéreo 16 bit, mais um canal
 de música, mixado pelo populares bibliotecas MOD MikMod, MIDI timidity
-e SMPEG MP3.
+e MPG123 MP3.
 
 %package devel
 Summary:	Header files and more to develop SDL_mixer applications
