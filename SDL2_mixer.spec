@@ -1,46 +1,44 @@
 #
 # Conditional build:
-%bcond_with	mikmod	# mikmod use for MOD support (modplug is used by default)
+%bcond_with	libxmp	# libxmp use for MOD support (modplug is used by default)
 %bcond_without	modplug	# modplug use for MOD support
-%bcond_with	libmad	# libmad use for MP3 support (libmpg123 is used by default)
 %bcond_without	mpg123	# libmpg123 use for MP3 support
 #
 # NOTE: libraries dlopened by sonames detected at build time:
 # libFLAC.so.8
 # libfluidsynth.so.1
-# libmikmod.so.2
 # libmodplug.so.1
 # libmpg123.so.0
 # libopusfile.so.0
 # libvorbisfile.so.3
+# libxmp.so.4
 #
 Summary:	Simple DirectMedia Layer - Sample Mixer Library
 Summary(pl.UTF-8):	Simple DirectMedia Layer - biblioteka miksująca próbki dźwiękowe
 Summary(pt_BR.UTF-8):	SDL2 - Biblioteca para mixagem
 Name:		SDL2_mixer
-Version:	2.0.4
-Release:	2
+Version:	2.6.0
+Release:	1
 License:	Zlib-like
 Group:		Libraries
-Source0:	http://www.libsdl.org/projects/SDL_mixer/release/%{name}-%{version}.tar.gz
-# Source0-md5:	a36e8410cac46b00a4d01752b32c3eb1
-URL:		http://www.libsdl.org/projects/SDL_mixer/
-BuildRequires:	SDL2-devel >= 2.0.7
+Source0:	https://github.com/libsdl-org/SDL_mixer/releases/download/release-%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	06055a1af8bad24d14f1d41da7ddf52c
+URL:		https://github.com/libsdl-org/SDL_mixer
+BuildRequires:	SDL2-devel >= 2.0.9
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flac-devel >= 1.3.0
 BuildRequires:	fluidsynth-devel
-%{?with_libmad:BuildRequires:	libmad-devel}
 BuildRequires:	libtool >= 2:2.0
-%{?with_mikmod:BuildRequires:	libmikmod-devel >= 3.1.10}
 %{?with_modplug:BuildRequires:	libmodplug-devel >= 0.8.8}
 %{?with_mpg123:BuildRequires:	libmpg123-devel}
 BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel >= 1:1.0
+%{?with_libxmp:BuildRequires:	libxmp-devel >= 4.2}
 BuildRequires:	opusfile-devel >= 0.2
 BuildRequires:	pkgconfig >= 1:0.9.0
-Requires:	SDL2 >= 2.0.7
-%{?with_mikmod:Suggests:	libmikmod >= 3.1.10}
+Requires:	SDL2 >= 2.0.9
+%{?with_libxmp:Suggests:	libxmp >= 4.2}
 %{?with_modplug:Suggests:	libmodplug >= 0.8.8}
 Suggests:	opusfile >= 0.2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -67,7 +65,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe do rozwoju aplikacji używających bibliot
 Summary(pt_BR.UTF-8):	Bibliotecas e arquivos de inclusão para desenvolvimento de aplicações SDL
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	SDL2-devel >= 2.0.7
+Requires:	SDL2-devel >= 2.0.9
 
 %description devel
 Header files and more to develop SDL2_mixer applications.
@@ -106,10 +104,14 @@ Bibliotecas estáticas para desenvolvimento com SDL2_mixer.
 %{__aclocal} -I acinclude
 %{__autoconf}
 %configure \
-	%{?with_mikmod:--enable-music-mod-mikmod} \
+	--disable-music-flac-drflac \
+	--disable-music-mp3-drmp3 \
+	--disable-music-ogg-stb \
+	--enable-music-flac-libflac \
+	--enable-music-ogg-vorbis \
+	%{?with_libxmp:--enable-music-mod-xmp} \
 	%{!?with_modplug:--disable-music-mod-modplug} \
-	%{?with_libmad:--enable-music-mp3-mad-gpl} \
-	%{!?with_mpg123:--disable-music-mp3-mpg123}
+	%{?with_mpg123:--enable-music-mp3-mpg123}
 %{__make}
 
 %install
@@ -129,7 +131,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES.txt COPYING.txt README.txt
+%doc CHANGES.txt LICENSE.txt README.txt
 %attr(755,root,root) %{_bindir}/playmus2
 %attr(755,root,root) %{_bindir}/playwave2
 %attr(755,root,root) %{_libdir}/libSDL2_mixer-2.0.so.*.*.*
@@ -139,6 +141,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libSDL2_mixer.so
 %{_libdir}/libSDL2_mixer.la
+%{_libdir}/cmake/SDL2_mixer
 %{_includedir}/SDL2/SDL_mixer.h
 %{_pkgconfigdir}/SDL2_mixer.pc
 
