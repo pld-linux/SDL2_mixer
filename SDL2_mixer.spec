@@ -123,6 +123,9 @@ rm -rf $RPM_BUILD_ROOT
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/playmus $RPM_BUILD_ROOT%{_bindir}/playmus2
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/playwave $RPM_BUILD_ROOT%{_bindir}/playwave2
 
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libSDL2_mixer.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -140,7 +143,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libSDL2_mixer.so
-%{_libdir}/libSDL2_mixer.la
 %{_libdir}/cmake/SDL2_mixer
 %{_includedir}/SDL2/SDL_mixer.h
 %{_pkgconfigdir}/SDL2_mixer.pc
