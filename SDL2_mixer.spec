@@ -17,12 +17,12 @@ Summary:	Simple DirectMedia Layer - Sample Mixer Library
 Summary(pl.UTF-8):	Simple DirectMedia Layer - biblioteka miksująca próbki dźwiękowe
 Summary(pt_BR.UTF-8):	SDL2 - Biblioteca para mixagem
 Name:		SDL2_mixer
-Version:	2.6.2
+Version:	2.6.3
 Release:	1
 License:	Zlib-like
 Group:		Libraries
 Source0:	https://github.com/libsdl-org/SDL_mixer/releases/download/release-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	b52c236b250e32f41d57574381a7c337
+# Source0-md5:	42c50ace7099b43b630d09d871f054c3
 URL:		https://github.com/libsdl-org/SDL_mixer
 BuildRequires:	SDL2-devel >= 2.0.9
 BuildRequires:	autoconf
