@@ -1,8 +1,9 @@
 #
 # Conditional build:
-%bcond_without	libxmp	# libxmp use for MOD support
-%bcond_with	modplug	# modplug use for MOD support (libxmp is used by default)
-%bcond_without	mpg123	# libmpg123 use for MP3 support
+%bcond_without	libxmp		# libxmp use for MOD support
+%bcond_with	modplug		# modplug use for MOD support (libxmp is used by default)
+%bcond_without	mpg123		# libmpg123 use for MP3 support
+%bcond_without	static_libs	# static library
 #
 # NOTE: libraries dlopened by sonames detected at build time:
 # libFLAC.so.8
@@ -40,6 +41,7 @@ BuildRequires:	libvorbis-devel >= 1:1.0
 %{?with_libxmp:BuildRequires:	libxmp-devel >= 4.2}
 BuildRequires:	opusfile-devel >= 0.2
 BuildRequires:	pkgconfig >= 1:0.9.0
+BuildRequires:	rpmbuild(macros) >= 1.527
 BuildRequires:	wavpack-devel >= 4.0
 Requires:	SDL2 >= 2.0.9
 %{?with_libxmp:Suggests:	libxmp >= 4.2}
@@ -108,6 +110,7 @@ Bibliotecas estáticas para desenvolvimento com SDL2_mixer.
 %{__aclocal} -I acinclude
 %{__autoconf}
 %configure \
+	%{__enable_disable static_libs static} \
 	--disable-music-flac-drflac \
 	--disable-music-mp3-minimp3 \
 	--disable-music-ogg-stb \
@@ -151,6 +154,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/SDL2/SDL_mixer.h
 %{_pkgconfigdir}/SDL2_mixer.pc
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libSDL2_mixer.a
+%endif
