@@ -1,34 +1,37 @@
 #
 # Conditional build:
-%bcond_with	libxmp	# libxmp use for MOD support (modplug is used by default)
-%bcond_without	modplug	# modplug use for MOD support
+%bcond_without	libxmp	# libxmp use for MOD support
+%bcond_with	modplug	# modplug use for MOD support (libxmp is used by default)
 %bcond_without	mpg123	# libmpg123 use for MP3 support
 #
 # NOTE: libraries dlopened by sonames detected at build time:
 # libFLAC.so.8
 # libfluidsynth.so.1
+# libgme.so.0
 # libmodplug.so.1
 # libmpg123.so.0
 # libopusfile.so.0
 # libvorbisfile.so.3
+# libwavpack.so.1
 # libxmp.so.4
 #
 Summary:	Simple DirectMedia Layer - Sample Mixer Library
 Summary(pl.UTF-8):	Simple DirectMedia Layer - biblioteka miksująca próbki dźwiękowe
 Summary(pt_BR.UTF-8):	SDL2 - Biblioteca para mixagem
 Name:		SDL2_mixer
-Version:	2.6.3
+Version:	2.8.0
 Release:	1
 License:	Zlib-like
 Group:		Libraries
 Source0:	https://github.com/libsdl-org/SDL_mixer/releases/download/release-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	42c50ace7099b43b630d09d871f054c3
+# Source0-md5:	6c4b2936784856c575b838a5731a23d1
 URL:		https://github.com/libsdl-org/SDL_mixer
 BuildRequires:	SDL2-devel >= 2.0.9
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flac-devel >= 1.3.0
 BuildRequires:	fluidsynth-devel
+BuildRequires:	game-music-emu-devel
 BuildRequires:	libtool >= 2:2.0
 %{?with_modplug:BuildRequires:	libmodplug-devel >= 0.8.8}
 %{?with_mpg123:BuildRequires:	libmpg123-devel}
@@ -37,6 +40,7 @@ BuildRequires:	libvorbis-devel >= 1:1.0
 %{?with_libxmp:BuildRequires:	libxmp-devel >= 4.2}
 BuildRequires:	opusfile-devel >= 0.2
 BuildRequires:	pkgconfig >= 1:0.9.0
+BuildRequires:	wavpack-devel >= 4.0
 Requires:	SDL2 >= 2.0.9
 %{?with_libxmp:Suggests:	libxmp >= 4.2}
 %{?with_modplug:Suggests:	libmodplug >= 0.8.8}
@@ -105,12 +109,12 @@ Bibliotecas estáticas para desenvolvimento com SDL2_mixer.
 %{__autoconf}
 %configure \
 	--disable-music-flac-drflac \
-	--disable-music-mp3-drmp3 \
+	--disable-music-mp3-minimp3 \
 	--disable-music-ogg-stb \
 	--enable-music-flac-libflac \
 	--enable-music-ogg-vorbis \
-	%{?with_libxmp:--enable-music-mod-xmp} \
-	%{!?with_modplug:--disable-music-mod-modplug} \
+	%{!?with_libxmp:--disable-music-mod-xmp} \
+	%{?with_modplug:--enable-music-mod-modplug} \
 	%{?with_mpg123:--enable-music-mp3-mpg123}
 %{__make}
 
