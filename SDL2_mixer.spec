@@ -6,8 +6,8 @@
 %bcond_without	static_libs	# static library
 #
 # NOTE: libraries dlopened by sonames detected at build time:
-# libFLAC.so.8
-# libfluidsynth.so.1
+# libFLAC.so.14
+# libfluidsynth.so.3
 # libgme.so.0
 # libmodplug.so.1
 # libmpg123.so.0
@@ -20,12 +20,13 @@ Summary:	Simple DirectMedia Layer - Sample Mixer Library
 Summary(pl.UTF-8):	Simple DirectMedia Layer - biblioteka miksująca próbki dźwiękowe
 Summary(pt_BR.UTF-8):	SDL2 - Biblioteca para mixagem
 Name:		SDL2_mixer
-Version:	2.8.0
+Version:	2.8.1
 Release:	1
 License:	Zlib-like
 Group:		Libraries
+#Source0Download: https://github.com/libsdl-org/SDL_mixer/releases
 Source0:	https://github.com/libsdl-org/SDL_mixer/releases/download/release-%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	6c4b2936784856c575b838a5731a23d1
+# Source0-md5:	7f477f8dd5c1be6dd710344193d210da
 URL:		https://github.com/libsdl-org/SDL_mixer
 BuildRequires:	SDL2-devel >= 2.0.9
 BuildRequires:	autoconf
